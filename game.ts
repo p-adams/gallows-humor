@@ -24,10 +24,9 @@ export class Game {
     return this.#word;
   }
   private charMap(): Array<{ letter: string; placeholder: string }> {
-    const chars = this.word
+    return this.word
       .split("")
       .map(($ch) => ({ letter: $ch, placeholder: "_ " }));
-    return chars;
   }
   private underscores() {
     return this.charMap()
