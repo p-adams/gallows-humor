@@ -23,9 +23,16 @@ export class Game {
   private get word(): string {
     return this.#word;
   }
+  private charMap(): Array<{ letter: string; placeholder: string }> {
+    const chars = this.word
+      .split("")
+      .map(($ch) => ({ letter: $ch, placeholder: "_ " }));
+    return chars;
+  }
   private underscores() {
-    const str = this.word;
-    return str.replace(/./g, "_ ");
+    return this.charMap()
+      .map(($cm) => $cm.placeholder)
+      .join("");
   }
   private printWordLength() {
     console.log("Word length: ", this.underscores());
