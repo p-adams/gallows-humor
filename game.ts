@@ -1,5 +1,12 @@
 type CharMapArray = Array<{ letter: string; guess: string }>;
 
+export enum ProcessStatus {
+  SUCCESS = "success",
+  INVALID_INPUT = "error:invalid_input",
+  ALREADY_GUESSED = "warning:already_guessed",
+  EXCEEDED_GUESS_LIMIT = "error:exceeded_guess_limit",
+}
+
 export class Game {
   static readonly #words = [
     "rocky",
@@ -58,31 +65,34 @@ export class Game {
     this.printWordLength();
   }
   // Method that takes a single character as input and updates the word and guesses properties
-  process(char: string) {
+  process(char: string): ProcessStatus {
     // Check if the input is a single character
     if (char.length > 1) {
-      // Print an error message if input is not a single character
-      console.log("Please enter a single character");
-      return;
+      // Return an error status code if input is not a single character
+      return ProcessStatus.INVALID_INPUT;
     }
+
     // Update the word property by replacing letters that match the input character
     this.word = this.word.map(($cm) =>
       $cm.letter === char ? { ...$cm, guess: char } : $cm
     );
-    // If the input character is not found in the word property, add it to the guesses property
 
+    // If the input character is not found in the word property, add it to the guesses property
     if (this.#guesses.length < this.word.length + 2) {
       if (!this.#guesses.includes(char)) {
         if (!this.word.find(($w) => $w.letter === char)) {
           this.#guesses.push(char);
         }
       } else {
-        return "You already guessed that character";
+        // Return a status code indicating that the character has already been guessed
+        return ProcessStatus.ALREADY_GUESSED;
       }
     } else {
-      return "You have exceeded the limit of guesses";
+      // Return a status code indicating that the limit of guesses has been exceeded
+      return ProcessStatus.EXCEEDED_GUESS_LIMIT;
     }
 
-    return this.word;
+    // Return a success status code
+    return ProcessStatus.SUCCESS;
   }
 }

@@ -1,5 +1,5 @@
 import { BufReader } from "https://deno.land/std@0.170.0/io/mod.ts";
-import { Game } from "./game.ts";
+import { Game, ProcessStatus } from "./game.ts";
 
 async function main() {
   const reader = new BufReader(Deno.stdin);
@@ -18,7 +18,7 @@ async function main() {
       Deno.exit(0);
     }
     const processed = game.process(line);
-    if (processed === "You have exceeded the limit of guesses") {
+    if (processed === ProcessStatus.EXCEEDED_GUESS_LIMIT) {
       console.log("You lose!");
       Deno.exit(0);
     }

@@ -1,5 +1,5 @@
 import { assertEquals } from "https://deno.land/std@0.113.0/testing/asserts.ts";
-import { Game } from "./game.ts";
+import { Game, ProcessStatus } from "./game.ts";
 
 Deno.test("Game: dashes should match word length", () => {
   const game = new Game("meow");
@@ -8,15 +8,13 @@ Deno.test("Game: dashes should match word length", () => {
 
 Deno.test("Game: process single character input", () => {
   const game = new Game("meow");
-  assertEquals(
-    [
-      { letter: "m", guess: "_" },
-      { letter: "e", guess: "e" },
-      { letter: "o", guess: "_" },
-      { letter: "w", guess: "_" },
-    ],
-    game.process("e")
-  );
+  game.process("e");
+  assertEquals("_e__", game.dashes());
+});
+
+Deno.test("Game: process invalid character input", () => {
+  const game = new Game("meow");
+  assertEquals(ProcessStatus.INVALID_INPUT, game.process("ee"));
 });
 
 Deno.test(
@@ -84,7 +82,7 @@ Deno.test("Game: single incorrect character guess", () => {
 Deno.test("Game: duplicate guess", () => {
   const game = new Game("meow");
   game.process("a");
-  assertEquals("You already guessed that character", game.process("a"));
+  assertEquals(ProcessStatus.ALREADY_GUESSED, game.process("a"));
   assertEquals(["a"], game.guesses());
 });
 
@@ -95,5 +93,5 @@ Deno.test("Game: exceed guesses", () => {
   game.process("c");
   game.process("d");
   game.process("e");
-  assertEquals("You have exceeded the limit of guesses", game.process("f"));
+  assertEquals(ProcessStatus.EXCEEDED_GUESS_LIMIT, game.process("f"));
 });
