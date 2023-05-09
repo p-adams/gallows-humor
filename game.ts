@@ -45,6 +45,10 @@ export class Game {
     console.log("Word length: ", this.dashes());
   }
 
+  isWin(): boolean {
+    return this.word.every(($cm) => $cm.letter === $cm.guess);
+  }
+
   greet() {
     console.log("Welcome to Gallows Humor");
     this.printWordLength();

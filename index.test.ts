@@ -1,4 +1,4 @@
-import { assertEquals } from "https://deno.land/std/testing/asserts.ts";
+import { assertEquals } from "https://deno.land/std@0.113.0/testing/asserts.ts";
 import { Game } from "./game.ts";
 
 Deno.test("Game: dashes should match word length", () => {
@@ -25,4 +25,21 @@ Deno.test("Game: process three character input", () => {
   game.process("w");
   game.process("m");
   assertEquals("me_w", game.dashes());
+});
+
+Deno.test("Game: lose", () => {
+  const game = new Game("meow");
+  game.process("e");
+  game.process("w");
+  game.process("m");
+  assertEquals(false, game.isWin());
+});
+
+Deno.test("Game: win", () => {
+  const game = new Game("meow");
+  game.process("e");
+  game.process("w");
+  game.process("o");
+  game.process("m");
+  assertEquals(true, game.isWin());
 });
