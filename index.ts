@@ -1,6 +1,7 @@
 import { BufReader } from "https://deno.land/std@0.170.0/io/mod.ts";
-import { Game, ProcessStatus } from "./game.ts";
+import { Game, ProcessStatus } from "./lib/game.ts";
 
+// example CLI program
 async function main() {
   const reader = new BufReader(Deno.stdin);
   const game = new Game("foo");

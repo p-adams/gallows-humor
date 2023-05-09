@@ -1,4 +1,4 @@
-type CharMapArray = Array<{ letter: string; guess: string }>;
+export type CharMapArray = Array<{ letter: string; guess: string }>;
 
 export enum ProcessStatus {
   SUCCESS = "success",
