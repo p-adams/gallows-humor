@@ -1,5 +1,7 @@
+type CharMapArray = Array<{ letter: string; guess: string }>;
+
 export class Game {
-  #words = [
+  static readonly #words = [
     "rocky",
     "known",
     "art",
@@ -11,37 +13,51 @@ export class Game {
     "therefore",
     "corner",
   ];
-  #word;
-  constructor() {
-    this.#word = this.generateWord();
+  #word: CharMapArray;
+  constructor(word?: string) {
+    if (word) {
+      this.#word = Game.charMap(word);
+    } else {
+      this.#word = Game.charMap(Game.randomWord(Game.#words));
+    }
   }
-  generateWord() {
-    const rnd = Math.random() * this.#words.length;
-    return this.#words[Math.floor(rnd)];
+  private static randomWord(words: Array<string>): string {
+    const rnd = Math.random() * words.length;
+    return words[Math.floor(rnd)];
   }
 
-  private get word(): string {
+  private get word(): CharMapArray {
     return this.#word;
   }
-  private charMap(): Array<{ letter: string; placeholder: string }> {
-    return this.word
-      .split("")
-      .map(($ch) => ({ letter: $ch, placeholder: "_ " }));
+  private set word(cm: CharMapArray) {
+    this.#word = cm;
   }
-  private underscores() {
-    return this.charMap()
-      .map(($cm) => $cm.placeholder)
-      .join("");
+
+  private static charMap(
+    str: string
+  ): Array<{ letter: string; guess: string }> {
+    return str.split("").map(($ch) => ({ letter: $ch, guess: "_" }));
+  }
+  dashes() {
+    return this.word.map(($cm) => $cm.guess).join("");
   }
   private printWordLength() {
-    console.log("Word length: ", this.underscores());
+    console.log("Word length: ", this.dashes());
   }
 
   greet() {
     console.log("Welcome to Gallows Humor");
     this.printWordLength();
   }
-  process(line: string) {
-    console.log(`You entered: ${line}`);
+  process(char: string) {
+    if (char.length > 1) {
+      console.log("Please enter a single character");
+      return;
+    }
+    console.log(`You entered: ${char}`);
+    this.word = this.word.map(($cm) =>
+      $cm.letter === char ? { ...$cm, guess: char } : $cm
+    );
+    return this.word;
   }
 }
