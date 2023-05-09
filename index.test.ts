@@ -43,3 +43,23 @@ Deno.test("Game: win", () => {
   game.process("m");
   assertEquals(true, game.isWin());
 });
+
+Deno.test("Game: single incorrect character guess", () => {
+  const game = new Game("meow");
+  game.process("e");
+  game.process("w");
+  game.process("o");
+  assertEquals("_eow", game.dashes());
+  game.process("x");
+  assertEquals("_eow", game.dashes());
+  assertEquals(["x"], game.guesses());
+  game.process("y");
+  assertEquals(["x", "y"], game.guesses());
+});
+
+Deno.test("Game: duplicate guess", () => {
+  const game = new Game("meow");
+  game.process("a");
+  assertEquals("You already guessed that character", game.process("a"));
+  assertEquals(["a"], game.guesses());
+});
