@@ -3,7 +3,7 @@ import { Game } from "./game.ts";
 
 async function main() {
   const reader = new BufReader(Deno.stdin);
-  const game = new Game("meow");
+  const game = new Game("foo");
   game.greet();
   while (true) {
     if (game.isWin()) {
