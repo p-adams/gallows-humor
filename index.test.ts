@@ -18,3 +18,11 @@ Deno.test("Game: process single character input", () => {
     game.process("e")
   );
 });
+
+Deno.test("Game: process three character input", () => {
+  const game = new Game("meow");
+  game.process("e");
+  game.process("w");
+  game.process("m");
+  assertEquals("me_w", game.dashes());
+});
